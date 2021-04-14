@@ -1,30 +1,39 @@
 import React from "react";
-import like from "./like.svg";
+import likeSvg from "../src/images/like.svg";
+import dislikeSvg from "../src/images/dislike.svg";
+import deleteSvg from "../src/images/delete.svg";
+import Button from "../src/components/buttons/Button";
+// import Gauge from "../src/components/Gauge";
+import "../src/style/Card.css";
 
+// TODO Add proptypes, docs,
 function Card(props) {
   return (
-    <div>
-      <h1>{props.title}</h1>
-      <h3>{props.category}</h3>
+    <div className="flex justify-center shadow overflow-hidden content-center">
       <div>
-        <button>
-          <img src={like} alt="like"></img>
-        </button>
-        <h5>{props.likes}</h5>
-        {props.likes !== 0 && (
-          <span>{props.likes === 1 ? "Like" : "Likes"}</span>
-        )}
+        <h5 className="p-2 text-center text-mono text-xl text-yellow-700">
+          {props.title}
+        </h5>
+        <h2 className="p-0.5 px-2 text-mono ">{props.category}</h2>
+        {/* Graph */}
+        {/* <Gauge></Gauge> */}
+        {/* Like */}
+        <div className="flex">
+          <Button
+            src={likeSvg}
+            onClick={props.handleLike}
+            count={props.likes}
+          />
+          {/* Dislike */}
+          <Button
+            src={dislikeSvg}
+            onClick={props.handleDislike}
+            count={props.disLikes}
+          />
+          {/* Delete */}
+          <Button src={deleteSvg} onClick={props.handleDelete} />
+        </div>
       </div>
-      <div className="flex">
-        <button>
-          <img src={like} alt="like"></img>
-        </button>
-        <h5>{props.disLikes}</h5>
-        {props.disLikes !== 0 && (
-          <span>{props.disLikes === 1 ? "Dislike" : "Dislikes"}</span>
-        )}
-      </div>
-      <button>Delete</button>
     </div>
   );
 }

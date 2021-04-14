@@ -3,9 +3,8 @@ import "./Main.css";
 
 function Main(props) {
   return (
-    <div>
-      <h1 className="Title">Movies List Test</h1>
-      <div>{props.children}</div>
+    <div className="container mx-auto px-4">
+      <div className="flex">{props.children}</div>
     </div>
   );
 }

@@ -1,32 +1,74 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "./Card";
 import PropTypes from "prop-types";
+import "./style/CardList.css";
+import Pagination from "../src/components/Pagination";
+import next from "../src/images/next.svg";
+import previous from "../src/images/previous.svg";
+import plus from "../src/images/plus.svg";
+import minus from "../src/images/minus.svg";
 
 function CardList(props) {
-  const [movieList, setMovieList] = useState("" || props.movies);
+  const [defaultState, setDefaultState] = useState(props.movies);
+  const [movieList, setMovieList] = useState("" || defaultState);
   const [category, setCategory] = useState("");
+  const [layout, setLayout] = useState(12);
+  const [visible, setVisible] = useState(0);
+  let pagination = Math.ceil(movieList.length / layout);
+
   const movieCategories = [
-    ...new Set(props.movies.map((movieCategory) => movieCategory.category)),
+    ...new Set(defaultState.map((movieCategory) => movieCategory.category)),
   ];
 
-  function handleChange(e) {
-    setCategory(e.target.value);
-    let categoryList = props.movies.filter((element) => {
+  useEffect(() => {
+    let categoryList = defaultState.filter((element) => {
       return element.category === category;
     });
-    setMovieList(categoryList.length > 0 ? categoryList : props.movies);
+    setMovieList(categoryList.length > 0 ? categoryList : defaultState);
+  }, [category, defaultState]);
+
+  function handleLike(input, like, dislike) {
+    let index = defaultState.findIndex((element) => element.id === input);
+    const newArray = [...defaultState];
+    newArray[index] = {
+      ...newArray[index],
+      likes: like + 1,
+      dislikes: `${dislike !== 0 ? dislike - 1 : 0}`,
+    };
+    setDefaultState(newArray);
+  }
+  function handleDislike(input, like, dislike) {
+    let index = defaultState.findIndex((element) => element.id === input);
+    const newArray = [...defaultState];
+    newArray[index] = {
+      ...newArray[index],
+      likes: `${like !== 0 ? like - 1 : 0}`,
+      dislikes: `${dislike + 1}`,
+    };
+    setDefaultState(newArray);
+  }
+  function handleDelete(input) {
+    let index = defaultState.findIndex((element) => element.id === input);
+    let newArray = [...defaultState];
+    newArray.splice(index, 1);
+    setDefaultState(newArray);
+  }
+  function showMore() {
+    setVisible((value) => value + 3);
   }
   return (
-    <div>
+    <div className="container mx-auto flex flex-col justify-center">
       {/* Select Option to filter by category*/}
-      <div>
+      <div className="my-4">
         <label htmlFor="category-select">Choose a category:</label>
 
         <select
           name="movie-categories"
           id="category-select"
           value={category}
-          onChange={handleChange}
+          onChange={(e) => {
+            setCategory(e.target.value);
+          }}
         >
           <option value="">--Please choose an option--</option>
 
@@ -38,20 +80,72 @@ function CardList(props) {
             );
           })}
         </select>
+        <div className="">
+          <Pagination
+            right={plus}
+            disabledLeft={layout ? (layout <= 4 ? true : false) : false}
+            disabledRight={layout ? (layout >= 12 ? true : false) : false}
+            onClickRight={() => {
+              setLayout(layout + 4);
+            }}
+            left={minus}
+            onClickLeft={() => {
+              setLayout(layout - 4);
+            }}
+            value={layout}
+          >
+            <span className="mt-1 px-1">{layout}&nbsp;Layout</span>{" "}
+          </Pagination>
+        </div>
       </div>
 
       {/* Display all the the movies as a list of cards*/}
-      {movieList.map((child, index) => {
-        return (
-          <Card
-            key={index}
-            title={child.title}
-            category={child.category}
-            likes={child.likes}
-            disLikes={child.dislikes}
-          ></Card>
-        );
-      })}
+      <div
+        className={`m-2 grid grid-flow-row sm:grid-cols-2 md:grid-cols-${
+          layout / 2
+        } flex-auto gap-2`}
+      >
+        {movieList.slice(visible, visible + layout).map((child, index) => {
+          return (
+            <div>
+              <Card
+                key={index}
+                title={child.title}
+                category={child.category}
+                likes={child.likes}
+                disLikes={child.dislikes}
+                handleDelete={() => {
+                  handleDelete(child.id);
+                }}
+                handleLike={() => {
+                  handleLike(child.id, child.likes, child.dislikes);
+                }}
+                handleDislike={() => {
+                  handleDislike(child.id, child.likes, child.dislikes);
+                }}
+              />
+            </div>
+          );
+        })}
+      </div>
+      <Pagination
+        right={next}
+        left={previous}
+        disabledLeft={visible ? (visible <= 1 ? true : false) : false}
+        disabledRight={
+          visible ? (visible === pagination ? true : false) : false
+        }
+        onClickLeft={() => {
+          setVisible(visible - layout);
+        }}
+        onClickRight={() => {
+          setVisible(visible + layout);
+        }}
+      >
+        <span>
+          {pagination}&nbsp;{visible}
+        </span>
+      </Pagination>
     </div>
   );
 }
