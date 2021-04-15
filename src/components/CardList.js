@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Card from "./Card";
-import PropTypes from "prop-types";
-import Pagination from "../src/components/Pagination";
-import next from "../src/images/next.svg";
-import previous from "../src/images/previous.svg";
-import plus from "../src/images/plus.svg";
-import minus from "../src/images/minus.svg";
+import Pagination from "./Pagination";
+import next from "../images/next.svg";
+import previous from "../images/previous.svg";
+import plus from "../images/plus.svg";
+import minus from "../images/minus.svg";
+import movies from "../lib/movies";
 
-function CardList(props) {
-  const [defaultState, setDefaultState] = useState(props.movies);
+function CardList() {
+  const [defaultState, setDefaultState] = useState(movies);
   const [movieList, setMovieList] = useState("" || defaultState);
   const [category, setCategory] = useState("");
   const [layout, setLayout] = useState(12);
@@ -26,6 +26,7 @@ function CardList(props) {
     setMovieList(categoryList.length > 0 ? categoryList : defaultState);
   }, [category, defaultState]);
 
+  // Function to update like count for a card
   function handleLike(input, like, dislike) {
     let index = defaultState.findIndex((element) => element.id === input);
     const newArray = [...defaultState];
@@ -38,6 +39,7 @@ function CardList(props) {
     };
     setDefaultState(newArray);
   }
+  // Function to update dislike count for a card
   function handleDislike(input, like, dislike) {
     let index = defaultState.findIndex((element) => element.id === input);
     const newArray = [...defaultState];
@@ -48,21 +50,18 @@ function CardList(props) {
     };
     setDefaultState(newArray);
   }
+  // Function to delete a movie card
   function handleDelete(input) {
     let index = defaultState.findIndex((element) => element.id === input);
     let newArray = [...defaultState];
     newArray.splice(index, 1);
     setDefaultState(newArray);
   }
-  function showMore() {
-    setVisible((value) => value + 3);
-  }
   return (
     <div className="container mx-auto flex flex-col justify-center">
       {/* Select Option to filter by category*/}
       <div className="my-4">
         <label htmlFor="category-select">Choose a category:</label>
-
         <select
           name="movie-categories"
           id="category-select"
@@ -72,7 +71,6 @@ function CardList(props) {
           }}
         >
           <option value="">--Please choose an option--</option>
-
           {movieCategories.map((child, index) => {
             return (
               <option key={index} value={child}>
@@ -81,7 +79,8 @@ function CardList(props) {
             );
           })}
         </select>
-        <div className="">
+        {/* Layout */}
+        <div>
           <Pagination
             right={plus}
             disabledLeft={layout ? (layout <= 4 ? true : false) : false}
@@ -97,7 +96,7 @@ function CardList(props) {
           >
             <span className="mt-1 px-1">
               {layout}x{layout}&nbsp;Layout
-            </span>{" "}
+            </span>
           </Pagination>
         </div>
       </div>
@@ -138,10 +137,6 @@ function CardList(props) {
         <Pagination
           right={next}
           left={previous}
-          // disabledLeft={visible ? (visible <= 1 ? true : false) : false}
-          // disabledRight={
-          //   visible ? (visible === pagination ? true : false) : false
-          // }
           disabledLeft={(pagination === 1 && true) || (visible === 0 && true)}
           disabledRight={
             (pagination === 1 && true) ||
@@ -153,93 +148,10 @@ function CardList(props) {
           onClickRight={() => {
             setVisible(visible + layout);
           }}
-        >
-          {/* <span>
-            {pagination}&nbsp;{visible}{" "}
-            {pagination % visible ? pagination % visible : 0}
-          </span> */}
-        </Pagination>
+        />
       )}
     </div>
   );
 }
 
-CardList.propTypes = {
-  movies: PropTypes.array.isRequired,
-};
-
-CardList.defaultProps = {
-  movies: [
-    {
-      id: "1",
-      title: "Oceans 8",
-      category: "Comedy",
-      likes: 4,
-      dislikes: 1,
-    },
-    {
-      id: "2",
-      title: "Midnight Sun",
-      category: "Comedy",
-      likes: 2,
-      dislikes: 0,
-    },
-    {
-      id: "3",
-      title: "Les indestructibles 2",
-      category: "Animation",
-      likes: 3,
-      dislikes: 1,
-    },
-    {
-      id: "4",
-      title: "Sans un bruit",
-      category: "Thriller",
-      likes: 6,
-      dislikes: 6,
-    },
-    {
-      id: "5",
-      title: "Creed II",
-      category: "Drame",
-      likes: 16,
-      dislikes: 2,
-    },
-    {
-      id: "6",
-      title: "Pulp Fiction",
-      category: "Thriller",
-      likes: 11,
-      dislikes: 3,
-    },
-    {
-      id: "7",
-      title: "Pulp Fiction",
-      category: "Thriller",
-      likes: 12333,
-      dislikes: 32,
-    },
-    {
-      id: "8",
-      title: "Seven",
-      category: "Thriller",
-      likes: 2,
-      dislikes: 1,
-    },
-    {
-      id: "9",
-      title: "Inception",
-      category: "Thriller",
-      likes: 2,
-      dislikes: 1,
-    },
-    {
-      id: "10",
-      title: "Gone Girl",
-      category: "Thriller",
-      likes: 22,
-      dislikes: 12,
-    },
-  ],
-};
 export default CardList;

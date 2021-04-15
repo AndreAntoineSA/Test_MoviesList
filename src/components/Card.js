@@ -1,10 +1,10 @@
 import React from "react";
-import likeSvg from "../src/images/like.svg";
-import dislikeSvg from "../src/images/dislike.svg";
-import deleteSvg from "../src/images/delete.svg";
-import Button from "../src/components/buttons/Button";
-import Gauge from "../src/components/Gauge";
-import ToggleButton from "../src/components/buttons/ToggleButton";
+import likeSvg from "../images/like.svg";
+import dislikeSvg from "../images/dislike.svg";
+import deleteSvg from "../images/delete.svg";
+import Button from "./buttons/Button";
+import Gauge from "./Gauge";
+import ToggleButton from "./buttons/ToggleButton";
 
 // TODO Add proptypes, docs,
 function Card(props) {

@@ -1,6 +1,4 @@
 import React from "react";
-import previous from "../images/previous.svg";
-import next from "../images/next.svg";
 
 function Pagination(props) {
   return (
@@ -9,7 +7,6 @@ function Pagination(props) {
         <button
           type="button"
           onClick={props.onClickLeft}
-          //   disabled={props?.value ? (props?.value <= 4 ? true : false) : false}
           disabled={props.disabledLeft}
           class="relative inline-flex items-center rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-yellow-700 focus:border-yellow-700"
         >
@@ -19,7 +16,6 @@ function Pagination(props) {
         <button
           type="button"
           onClick={props.onClickRight}
-          //   disabled={props?.value ? (props?.value >= 12 ? true : false) : false}
           disabled={props.disabledRight}
           class="-ml-px relative inline-flex  items-center  rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-yellow-700 focus:border-yellow-700"
         >
