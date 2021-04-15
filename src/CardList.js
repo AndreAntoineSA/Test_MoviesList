@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Card from "./Card";
 import PropTypes from "prop-types";
-import "./style/CardList.css";
 import Pagination from "../src/components/Pagination";
 import next from "../src/images/next.svg";
 import previous from "../src/images/previous.svg";
@@ -32,8 +31,10 @@ function CardList(props) {
     const newArray = [...defaultState];
     newArray[index] = {
       ...newArray[index],
-      likes: like + 1,
-      dislikes: `${dislike !== 0 ? dislike - 1 : 0}`,
+      likes: Number(like) + Number(1),
+      dislikes: `${
+        dislike !== 0 ? Number(Number(dislike) - Number(1)) : Number(0)
+      }`,
     };
     setDefaultState(newArray);
   }
@@ -42,8 +43,8 @@ function CardList(props) {
     const newArray = [...defaultState];
     newArray[index] = {
       ...newArray[index],
-      likes: `${like !== 0 ? like - 1 : 0}`,
-      dislikes: `${dislike + 1}`,
+      likes: `${like !== 0 ? Number(Number(like) - Number(1)) : Number(0)}`,
+      dislikes: Number(dislike) + Number(1),
     };
     setDefaultState(newArray);
   }

@@ -6,8 +6,6 @@ import Button from "../src/components/buttons/Button";
 import Gauge from "../src/components/Gauge";
 import ToggleButton from "../src/components/buttons/ToggleButton";
 
-import "../src/style/Card.css";
-
 // TODO Add proptypes, docs,
 function Card(props) {
   return (
@@ -17,12 +15,12 @@ function Card(props) {
           {props.title}
         </h5>
         <h2 className="p-0.5 px-2 text-center text-mono ">{props.category}</h2>
-        <div className="w-3/4">
+        <div className="w-3/4 m-1">
           <Gauge like={props.likes} dislike={props.disLikes}></Gauge>
         </div>
 
         {/* Like */}
-        <div className="flex flex-wrap px-auto mb-5">
+        <div className="flex flex-wrap px-auto mt-4 mb-5">
           <ToggleButton
             likeSvg={likeSvg}
             dislikeSvg={dislikeSvg}
