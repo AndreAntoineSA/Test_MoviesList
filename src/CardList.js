@@ -94,14 +94,16 @@ function CardList(props) {
             }}
             value={layout}
           >
-            <span className="mt-1 px-1">{layout}&nbsp;Layout</span>{" "}
+            <span className="mt-1 px-1">
+              {layout}x{layout}&nbsp;Layout
+            </span>{" "}
           </Pagination>
         </div>
       </div>
 
       {/* Display all the the movies as a list of cards*/}
       <div
-        className={`m-2 grid grid-flow-row sm:grid-cols-2 md:grid-cols-${
+        className={`m-2 grid grid-flow-row sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-${
           layout / 2
         } flex-auto gap-2`}
       >
@@ -114,6 +116,7 @@ function CardList(props) {
                 category={child.category}
                 likes={child.likes}
                 disLikes={child.dislikes}
+                id={child.id}
                 handleDelete={() => {
                   handleDelete(child.id);
                 }}
@@ -128,24 +131,34 @@ function CardList(props) {
           );
         })}
       </div>
-      <Pagination
-        right={next}
-        left={previous}
-        disabledLeft={visible ? (visible <= 1 ? true : false) : false}
-        disabledRight={
-          visible ? (visible === pagination ? true : false) : false
-        }
-        onClickLeft={() => {
-          setVisible(visible - layout);
-        }}
-        onClickRight={() => {
-          setVisible(visible + layout);
-        }}
-      >
-        <span>
-          {pagination}&nbsp;{visible}
-        </span>
-      </Pagination>
+
+      {/* Page */}
+      {pagination > 1 && (
+        <Pagination
+          right={next}
+          left={previous}
+          // disabledLeft={visible ? (visible <= 1 ? true : false) : false}
+          // disabledRight={
+          //   visible ? (visible === pagination ? true : false) : false
+          // }
+          disabledLeft={(pagination === 1 && true) || (visible === 0 && true)}
+          disabledRight={
+            (pagination === 1 && true) ||
+            (pagination === pagination % visible && true)
+          }
+          onClickLeft={() => {
+            setVisible(visible - layout);
+          }}
+          onClickRight={() => {
+            setVisible(visible + layout);
+          }}
+        >
+          {/* <span>
+            {pagination}&nbsp;{visible}{" "}
+            {pagination % visible ? pagination % visible : 0}
+          </span> */}
+        </Pagination>
+      )}
     </div>
   );
 }
